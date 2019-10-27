@@ -44,6 +44,7 @@ namespace AppInsightsForWebApi
 
       services.AddSingleton<ITelemetryInitializer, SetUserIdTelemetryInitializer>();
       services.AddSingleton<ITelemetryInitializer, NotFoundTelemetryInitializer>();
+      services.AddSingleton<ITelemetryInitializer, ExceptionTelemetryInitializer>();
 
       services.AddHttpContextAccessor();
 

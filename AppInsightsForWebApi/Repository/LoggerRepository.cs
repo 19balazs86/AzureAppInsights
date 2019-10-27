@@ -14,7 +14,10 @@ namespace AppInsightsForWebApi.Repository
       }
       catch (IndexOutOfRangeException ex)
       {
-        throw new LoggerRepositoryException("Index was out of the range in the Repository", ex);
+        var lrException = new LoggerRepositoryException("Index was out of the range in the Repository", ex);
+        lrException.Data.Add("RepositoryData1", "Just a value");
+
+        throw lrException;
       }
     }
   }

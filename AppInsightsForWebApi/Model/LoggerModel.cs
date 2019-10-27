@@ -19,7 +19,11 @@ namespace AppInsightsForWebApi.Model
       }
       catch (LoggerRepositoryException ex)
       {
-        throw new LoggerModelException("Failed to save the entity in the Model.", ex);
+        var lmException = new LoggerModelException("Failed to save the entity in the Model.", ex);
+        lmException.Data.Add("ModelData1", 5);
+        lmException.Data.Add("ModelData2", true);
+
+        throw lmException;
       }
     }
   }
