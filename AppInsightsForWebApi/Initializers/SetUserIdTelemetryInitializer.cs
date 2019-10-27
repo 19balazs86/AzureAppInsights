@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Security.Claims;
 using Microsoft.ApplicationInsights.Channel;
 using Microsoft.ApplicationInsights.DataContracts;
 using Microsoft.ApplicationInsights.Extensibility;
@@ -10,8 +10,6 @@ namespace AppInsightsForWebApi.Initializers
   // https://docs.microsoft.com/en-ie/azure/azure-monitor/app/api-filtering-sampling#itelemetryprocessor-and-itelemetryinitializer
   public class SetUserIdTelemetryInitializer : ITelemetryInitializer
   {
-    private readonly Random _random = new Random();
-
     private readonly IHttpContextAccessor _httpContextAccessor;
 
     public SetUserIdTelemetryInitializer(IHttpContextAccessor httpContextAccessor)
@@ -26,13 +24,15 @@ namespace AppInsightsForWebApi.Initializers
           telemetry is ExceptionTelemetry ||
           telemetry is DependencyTelemetry)
       {
-        //string userName = _httpContextAccessor.HttpContext?.User.Identity.Name;
+        ClaimsPrincipal user = _httpContextAccessor.HttpContext?.User;
 
-        //if (string.IsNullOrWhiteSpace(userName)) return;
+        if (user is null || !user.Identity.IsAuthenticated) return;
 
-        //telemetry.Context.User.Id = userName;
+        telemetry.Context.User.Id = user.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-        telemetry.Context.User.Id = $"User#{_random.Next(1, 6)}";
+        // https://docs.microsoft.com/en-us/azure/azure-monitor/app/usage-send-user-context
+        // https://eriksteinebach.com/2018/05/06/specific-user-application-insights-netcore
+        // https://hajekj.net/2017/03/13/tracking-currently-signed-in-user-in-application-insights
       }
     }
   }

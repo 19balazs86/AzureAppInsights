@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using AppInsightsForWebApi.Initializers;
 using AppInsightsForWebApi.Model;
@@ -18,6 +20,8 @@ namespace AppInsightsForWebApi
 {
   public class Startup
   {
+    private static readonly Random _random = new Random();
+
     private readonly IWebHostEnvironment _environment;
 
     public Startup(IWebHostEnvironment environment)
@@ -32,7 +36,6 @@ namespace AppInsightsForWebApi
 
       services.AddApplicationInsightsTelemetry();
 
-      // Remove PerformanceCollectorModule and EventCounterCollectionModule in Development.
       // https://docs.microsoft.com/en-us/azure/azure-monitor/app/asp-net-core#configuring-or-removing-default-telemetrymodules
       if (_environment.IsDevelopment())
       {
@@ -42,6 +45,7 @@ namespace AppInsightsForWebApi
           services.Remove(module);
       }
 
+      // Add TelemetryInitializers
       services.AddSingleton<ITelemetryInitializer, SetUserIdTelemetryInitializer>();
       services.AddSingleton<ITelemetryInitializer, NotFoundTelemetryInitializer>();
       services.AddSingleton<ITelemetryInitializer, ExceptionTelemetryInitializer>();
@@ -67,6 +71,8 @@ namespace AppInsightsForWebApi
 
       app.UseAuthorization();
 
+      app.Use(injectFakeUser);
+
       app.UseEndpoints(endpoints =>
       {
         endpoints.MapControllers();
@@ -82,5 +88,21 @@ namespace AppInsightsForWebApi
       await context.Response.WriteAsync("The requested endpoint is not found.");
     }
 
+    private static Task injectFakeUser(HttpContext httpContext, Func<Task> next)
+    {
+      int userId = _random.Next(1, 6);
+
+      IEnumerable<Claim> claims = new List<Claim>
+      {
+        new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
+        new Claim(ClaimTypes.Name, $"User#{userId}")
+      };
+
+      var claimsIdentity = new ClaimsIdentity(claims, "FakeAuthType");
+
+      httpContext.User = new ClaimsPrincipal(claimsIdentity);
+
+      return next.Invoke();
+    }
   }
 }
