@@ -43,6 +43,7 @@ namespace AppInsightsForWebApi
       }
 
       services.AddSingleton<ITelemetryInitializer, SetUserIdTelemetryInitializer>();
+      services.AddSingleton<ITelemetryInitializer, NotFoundTelemetryInitializer>();
 
       services.AddHttpContextAccessor();
 
@@ -75,6 +76,7 @@ namespace AppInsightsForWebApi
 
     private static async Task pageNotFoundHandler(HttpContext context)
     {
+      context.Items.Add(NotFoundTelemetryInitializer.NotFoundKey, true); // Use it in the NotFoundTelemetryInitializer.
       context.Response.StatusCode = 404;
       await context.Response.WriteAsync("The requested endpoint is not found.");
     }
