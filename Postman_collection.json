@@ -1,0 +1,122 @@
+{
+	"info": {
+		"_postman_id": "49ee9298-bb52-4031-a69f-4f52a7b57fb3",
+		"name": "AzureAppInsights",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "WeatherForecastMore",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/WeatherForecast/GimmeMore?randomInt={{$randomInt}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"WeatherForecast",
+						"GimmeMore"
+					],
+					"query": [
+						{
+							"key": "randomInt",
+							"value": "{{$randomInt}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "WeatherForecastOne",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/WeatherForecast/GimmeOne?randomInt={{$randomInt}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"WeatherForecast",
+						"GimmeOne"
+					],
+					"query": [
+						{
+							"key": "randomInt",
+							"value": "{{$randomInt}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Logger-DoLog",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/Logger/DoSomeLog",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"Logger",
+						"DoSomeLog"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "NotFound-FromController",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/NotFound/NotFoundResponse",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"NotFound",
+						"NotFoundResponse"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "NotFound-FromMapFallback",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/NotFound/NotExists",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"NotFound",
+						"NotExists"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
