@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using AppInsightsForWebApi.Initializers;
 using AppInsightsForWebApi.Model;
 using AppInsightsForWebApi.Repository;
 using Microsoft.ApplicationInsights.Channel;
@@ -40,6 +41,10 @@ namespace AppInsightsForWebApi
         foreach (var module in services.Where(t => moduleTypes.Contains(t.ImplementationType)).ToArray())
           services.Remove(module);
       }
+
+      services.AddSingleton<ITelemetryInitializer, SetUserIdTelemetryInitializer>();
+
+      services.AddHttpContextAccessor();
 
       services.AddControllers();
 
