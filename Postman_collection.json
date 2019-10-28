@@ -116,6 +116,26 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "CallJsonPlaceholder",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/Dependency/CallJsonPlaceholder",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"Dependency",
+						"CallJsonPlaceholder"
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"protocolProfileBehavior": {}

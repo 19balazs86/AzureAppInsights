@@ -20,6 +20,8 @@ namespace AppInsightsForWebApi
 {
   public class Startup
   {
+    public const string ClientName = "jsonplaceholder";
+
     private static readonly Random _random = new Random();
 
     private readonly IWebHostEnvironment _environment;
@@ -56,6 +58,9 @@ namespace AppInsightsForWebApi
 
       services.AddSingleton<LoggerModel>();
       services.AddSingleton<LoggerRepository>();
+
+      services.AddHttpClient(ClientName, client =>
+        client.BaseAddress = new Uri("http://jsonplaceholder.typicode.com"));
     }
 
     public void Configure(IApplicationBuilder app, TelemetryConfiguration telemetryConfiguration)
