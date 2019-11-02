@@ -24,22 +24,22 @@ namespace AppInsightsForWebApi
 
     private static readonly Random _random = new Random();
 
-    private readonly IWebHostEnvironment _environment;
+    private readonly bool _isDevelopment;
 
     public Startup(IWebHostEnvironment environment)
     {
-      _environment = environment;
+      _isDevelopment = environment.IsDevelopment();
     }
 
     public void ConfigureServices(IServiceCollection services)
     {
-     if (_environment.IsDevelopment())
+     if (_isDevelopment)
         services.AddSingleton<ITelemetryChannel>(new InMemoryChannel { DeveloperMode = true });
 
       services.AddApplicationInsightsTelemetry();
 
       // https://docs.microsoft.com/en-us/azure/azure-monitor/app/asp-net-core#configuring-or-removing-default-telemetrymodules
-      if (_environment.IsDevelopment())
+      if (_isDevelopment)
       {
         Type[] moduleTypes = new Type[] { typeof(PerformanceCollectorModule), typeof(EventCounterCollectionModule) };
 
@@ -65,7 +65,7 @@ namespace AppInsightsForWebApi
 
     public void Configure(IApplicationBuilder app, TelemetryConfiguration telemetryConfiguration)
     {
-      if (_environment.IsDevelopment())
+      if (_isDevelopment)
       {
         //telemetryConfiguration.DisableTelemetry = true;
 

@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.DataContracts;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
 namespace AppInsightsForWebApi.Controllers
 {
@@ -14,13 +13,12 @@ namespace AppInsightsForWebApi.Controllers
   public class WeatherForecastController : ControllerBase
   {
     private static readonly Random _random = new Random();
-    private readonly TelemetryClient _telemetryClient;
-    private readonly ILogger<WeatherForecastController> _logger;
 
-    public WeatherForecastController(TelemetryClient telemetryClient, ILogger<WeatherForecastController> logger)
+    private readonly TelemetryClient _telemetryClient;
+
+    public WeatherForecastController(TelemetryClient telemetryClient)
     {
       _telemetryClient = telemetryClient;
-      _logger = logger;
     }
 
     [HttpGet("GimmeMore")]
