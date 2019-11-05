@@ -2,6 +2,7 @@
 using System.Net.Http;
 using System.Net.Mime;
 using System.Threading.Tasks;
+using Microsoft.ApplicationInsights.DataContracts;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AppInsightsForWebApi.Controllers
@@ -20,6 +21,12 @@ namespace AppInsightsForWebApi.Controllers
     [HttpGet("CallJsonPlaceholder")]
     public async Task CallJsonPlaceholder()
     {
+      // Add an extra property to the request telemetry.
+      var requestTelemetry = HttpContext.Features.Get<RequestTelemetry>();
+
+      if (requestTelemetry != null)
+        requestTelemetry.Properties["ExtraProperty"] = "Extra value";
+
       HttpClient httpClient = _clientFactory.CreateClient(Startup.ClientName);
 
       Response.ContentType = MediaTypeNames.Application.Json;
