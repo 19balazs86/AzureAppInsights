@@ -80,6 +80,8 @@ namespace AppInsightsForWebApi
 
       app.UseEndpoints(endpoints =>
       {
+        endpoints.MapVersionEndpoint("/version"); // .RequireAuthorization() .RequireCors("AllowAllHosts");
+
         endpoints.MapControllers();
 
         endpoints.MapFallback(pageNotFoundHandler);
