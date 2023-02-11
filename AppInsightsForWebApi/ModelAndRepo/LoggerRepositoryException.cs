@@ -1,10 +1,9 @@
-﻿using System;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 
-namespace AppInsightsForWebApi.Repository
+namespace AppInsightsForWebApi.ModelAndRepo;
+
+public class LoggerRepositoryException : Exception
 {
-  public class LoggerRepositoryException : Exception
-  {
     public LoggerRepositoryException()
     {
     }
@@ -20,5 +19,4 @@ namespace AppInsightsForWebApi.Repository
     protected LoggerRepositoryException(SerializationInfo info, StreamingContext context) : base(info, context)
     {
     }
-  }
 }

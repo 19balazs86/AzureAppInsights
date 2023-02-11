@@ -1,40 +1,36 @@
-﻿using System.IO;
-using System.Net.Http;
-using System.Net.Mime;
-using System.Threading.Tasks;
-using Microsoft.ApplicationInsights.DataContracts;
+﻿using Microsoft.ApplicationInsights.DataContracts;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.Mime;
 
-namespace AppInsightsForWebApi.Controllers
+namespace AppInsightsForWebApi.Controllers;
+
+[ApiController]
+[Route("[controller]")]
+public sealed class DependencyController : ControllerBase
 {
-  [ApiController]
-  [Route("[controller]")]
-  public class DependencyController : ControllerBase
-  {
     private readonly IHttpClientFactory _clientFactory;
 
     public DependencyController(IHttpClientFactory clientFactory)
     {
-      _clientFactory = clientFactory;
+        _clientFactory = clientFactory;
     }
 
     [HttpGet("CallJsonPlaceholder")]
     public async Task CallJsonPlaceholder()
     {
-      // Add an extra property to the request telemetry.
-      var requestTelemetry = HttpContext.Features.Get<RequestTelemetry>();
+        // Add an extra property to the request telemetry.
+        var requestTelemetry = HttpContext.Features.Get<RequestTelemetry>();
 
-      if (requestTelemetry != null)
-        requestTelemetry.Properties["ExtraProperty"] = "Extra value";
+        if (requestTelemetry != null)
+            requestTelemetry.Properties["ExtraProperty"] = "Extra value";
 
-      HttpClient httpClient = _clientFactory.CreateClient(Startup.ClientName);
+        HttpClient httpClient = _clientFactory.CreateClient(Startup.ClientName);
 
-      Response.ContentType = MediaTypeNames.Application.Json;
+        Response.ContentType = MediaTypeNames.Application.Json;
 
-      // await using will call the IAsyncDisposable at the end of the method.
-      await using Stream stream = await httpClient.GetStreamAsync("albums");
+        // await using will call the IAsyncDisposable at the end of the method.
+        await using Stream stream = await httpClient.GetStreamAsync("albums");
 
-      await stream.CopyToAsync(Response.Body);
+        await stream.CopyToAsync(Response.Body);
     }
-  }
 }
