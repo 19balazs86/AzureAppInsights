@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Reflection;
+﻿using System.Reflection;
 
 namespace AppInsightsForWebApi;
 
@@ -20,12 +19,12 @@ public static class VersionEndpointRouteBuilderExtensions
     }
 }
 
-public class VersionMiddleware
+public sealed class VersionMiddleware
 {
     private readonly RequestDelegate _next;
 
-    private static readonly Assembly _entryAssembly = Assembly.GetEntryAssembly();
-    private static readonly string _version = FileVersionInfo.GetVersionInfo(_entryAssembly.Location).FileVersion;
+    //private static readonly string _version = FileVersionInfo.GetVersionInfo(Assembly.GetEntryAssembly().Location).FileVersion;
+    private static readonly string _version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
 
     public VersionMiddleware(RequestDelegate next) => _next = next;
 

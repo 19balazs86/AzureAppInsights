@@ -21,7 +21,7 @@ public sealed class DependencyController : ControllerBase
         // Add an extra property to the request telemetry.
         var requestTelemetry = HttpContext.Features.Get<RequestTelemetry>();
 
-        if (requestTelemetry != null)
+        if (requestTelemetry is not null)
             requestTelemetry.Properties["ExtraProperty"] = "Extra value";
 
         HttpClient httpClient = _clientFactory.CreateClient(Startup.ClientName);

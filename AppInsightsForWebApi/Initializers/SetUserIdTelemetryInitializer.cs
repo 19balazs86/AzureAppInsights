@@ -7,7 +7,7 @@ namespace AppInsightsForWebApi.Initializers;
 
 // Difference between telemetry processors and telemetry initializers
 // https://docs.microsoft.com/en-ie/azure/azure-monitor/app/api-filtering-sampling#itelemetryprocessor-and-itelemetryinitializer
-public class SetUserIdTelemetryInitializer : ITelemetryInitializer
+public sealed class SetUserIdTelemetryInitializer : ITelemetryInitializer
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
 

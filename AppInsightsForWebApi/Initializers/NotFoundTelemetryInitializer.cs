@@ -4,7 +4,7 @@ using Microsoft.ApplicationInsights.Extensibility;
 
 namespace AppInsightsForWebApi.Initializers;
 
-public class NotFoundTelemetryInitializer : ITelemetryInitializer
+public sealed class NotFoundTelemetryInitializer : ITelemetryInitializer
 {
     public const string NotFoundKey = "NotFound";
 
@@ -22,7 +22,7 @@ public class NotFoundTelemetryInitializer : ITelemetryInitializer
         if (_httpContextAccessor.HttpContext.Items.ContainsKey(NotFoundKey))
             return; // If the NotFoundKey is present do not override the Success field.
 
-        if (int.TryParse(requestTelemetry.ResponseCode, out int code) && code >= 400 && code < 500)
+        if (int.TryParse(requestTelemetry.ResponseCode, out int code) && code  is >= 400 and < 500)
         {
             requestTelemetry.Success = true;
 

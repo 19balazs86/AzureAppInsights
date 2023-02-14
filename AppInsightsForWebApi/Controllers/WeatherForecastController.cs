@@ -53,7 +53,7 @@ public sealed class WeatherForecast
 {
     private static readonly string[] _summaries = new[]
     {
-      "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
+        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
     };
 
     public int RandomInt { get; set; }
@@ -61,11 +61,14 @@ public sealed class WeatherForecast
     public int Temperature { get; set; }
     public string Summary { get; set; }
 
-    public static WeatherForecast Create(int randomIntParam) => new WeatherForecast
+    public static WeatherForecast Create(int randomIntParam)
     {
-        RandomInt   = randomIntParam,
-        Date        = DateTime.Now.AddDays(randomIntParam),
-        Temperature = Random.Shared.Next(-20, 55),
-        Summary     = _summaries[Random.Shared.Next(_summaries.Length)]
-    };
+        return new WeatherForecast
+        {
+            RandomInt   = randomIntParam,
+            Date        = DateTime.Now.AddDays(randomIntParam),
+            Temperature = Random.Shared.Next(-20, 55),
+            Summary     = _summaries[Random.Shared.Next(_summaries.Length)]
+        };
+    }
 }
