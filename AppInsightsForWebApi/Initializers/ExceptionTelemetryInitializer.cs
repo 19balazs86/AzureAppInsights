@@ -11,16 +11,11 @@ public sealed class ExceptionTelemetryInitializer : ITelemetryInitializer
     {
         if (telemetry is not ExceptionTelemetry exceptionTelemetry) return;
 
-        var dataDictionary = new Dictionary<string, string>();
-
-        destructuringData(exceptionTelemetry.Exception, dataDictionary);
-
         // These fields will be found in the customDimensions field in AppInsights.
-        foreach (var item in dataDictionary)
-            exceptionTelemetry.Properties.Add(item.Key, item.Value);
+        destructuringData(exceptionTelemetry.Exception, exceptionTelemetry.Properties);
     }
 
-    private static void destructuringData(Exception exception, Dictionary<string, string> dataDictionary)
+    private static void destructuringData(Exception? exception, IDictionary<string, string> telemetryProperties)
     {
         if (exception is null) return;
 
@@ -28,15 +23,15 @@ public sealed class ExceptionTelemetryInitializer : ITelemetryInitializer
 
         if (data is { Count: > 0 })
         {
-            Dictionary<string, string> dataDic = data
-                .Cast<DictionaryEntry>()
-                .Where(x => x.Key is string && x.Value != null)
-                .ToDictionary(x => x.Key as string, x => x.Value.ToString());
-
-            foreach (var item in dataDic)
-                dataDictionary.TryAdd(item.Key, item.Value);
+            foreach ((object key, object? value) in data.Cast<DictionaryEntry>())
+            {
+                if (key is string keyString)
+                {
+                    telemetryProperties!.TryAdd(keyString, value?.ToString() ?? string.Empty);
+                }
+            }
         }
 
-        destructuringData(exception.InnerException, dataDictionary);
+        destructuringData(exception.InnerException, telemetryProperties);
     }
 }

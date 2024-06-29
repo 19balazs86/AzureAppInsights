@@ -24,7 +24,7 @@ public sealed class DependencyController : ControllerBase
         if (requestTelemetry is not null)
             requestTelemetry.Properties["ExtraProperty"] = "Extra value";
 
-        HttpClient httpClient = _clientFactory.CreateClient(Startup.ClientName);
+        HttpClient httpClient = _clientFactory.CreateClient(Program.ClientName);
 
         Response.ContentType = MediaTypeNames.Application.Json;
 

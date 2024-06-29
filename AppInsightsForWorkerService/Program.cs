@@ -1,39 +1,26 @@
-using Microsoft.ApplicationInsights.Channel;
-
 namespace AppInsightsForWorkerService;
 
-public class Program
+public static class Program
 {
     public const string ClientName = "jsonplaceholder";
 
     public static void Main(string[] args)
     {
-        createHostBuilder(args).Build().Run();
-    }
+        HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
 
-    private static IHostBuilder createHostBuilder(string[] args)
-    {
-        return Host
-            .CreateDefaultBuilder(args)
-            .ConfigureServices(configureServices)
-            .ConfigureLogging(configureLogging);
-    }
+        bool isDevelopment = builder.Environment.IsDevelopment();
 
-    private static void configureServices(HostBuilderContext hostContext, IServiceCollection services)
-    {
-        if (hostContext.HostingEnvironment.IsDevelopment())
-            services.AddSingleton<ITelemetryChannel>(new InMemoryChannel { DeveloperMode = true });
+        var services = builder.Services;
 
-        services.AddHostedService<Worker>();
+        // Add services to the container
+        {
+            services.AddHostedService<Worker>();
 
-        services.AddApplicationInsightsTelemetryWorkerService();
+            services.AddApplicationInsightsTelemetryWorkerService(options => options.DeveloperMode = isDevelopment);
 
-        services.AddHttpClient(ClientName, client => client.BaseAddress = new Uri("http://jsonplaceholder.typicode.com"));
-    }
+            services.AddHttpClient(ClientName, client => client.BaseAddress = new Uri("http://jsonplaceholder.typicode.com"));
+        }
 
-    private static void configureLogging(HostBuilderContext hostContext, ILoggingBuilder logging)
-    {
-        if (!hostContext.HostingEnvironment.IsDevelopment())
-            logging.ClearProviders();
+        builder.Build().Run();
     }
 }

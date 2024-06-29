@@ -51,15 +51,15 @@ public sealed class WeatherForecastController : ControllerBase
 
 public sealed class WeatherForecast
 {
-    private static readonly string[] _summaries = new[]
-    {
+    private static readonly string[] _summaries =
+    [
         "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-    };
+    ];
 
-    public int RandomInt { get; set; }
-    public DateTime Date { get; set; }
-    public int Temperature { get; set; }
-    public string Summary { get; set; }
+    public int RandomInt { get; init; }
+    public DateTime Date { get; init; }
+    public int Temperature { get; init; }
+    public string? Summary { get; init; }
 
     public static WeatherForecast Create(int randomIntParam)
     {

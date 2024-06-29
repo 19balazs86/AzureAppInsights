@@ -23,11 +23,12 @@ public sealed class SetUserIdTelemetryInitializer : ITelemetryInitializer
             telemetry is ExceptionTelemetry ||
             telemetry is DependencyTelemetry)
         {
-            ClaimsPrincipal user = _httpContextAccessor.HttpContext?.User;
+            Claim? userIdClaim = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier);
 
-            if (user is null || !user.Identity.IsAuthenticated) return;
-
-            telemetry.Context.User.Id = user.FindFirst(ClaimTypes.NameIdentifier).Value;
+            if (userIdClaim is not null)
+            {
+                telemetry.Context.User.Id = userIdClaim.Value;
+            }
 
             // https://docs.microsoft.com/en-us/azure/azure-monitor/app/usage-send-user-context
             // https://eriksteinebach.com/2018/05/06/specific-user-application-insights-netcore

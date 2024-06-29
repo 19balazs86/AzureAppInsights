@@ -24,7 +24,7 @@ public sealed class VersionMiddleware
     private readonly RequestDelegate _next;
 
     //private static readonly string _version = FileVersionInfo.GetVersionInfo(Assembly.GetEntryAssembly().Location).FileVersion;
-    private static readonly string _version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+    private static readonly string _version = Assembly.GetExecutingAssembly().GetName().Version!.ToString();
 
     public VersionMiddleware(RequestDelegate next) => _next = next;
 

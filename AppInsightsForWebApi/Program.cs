@@ -1,34 +1,105 @@
+using AppInsightsForWebApi.Initializers;
+using AppInsightsForWebApi.ServiceAndRepo;
+using Microsoft.ApplicationInsights.Extensibility;
+using Microsoft.ApplicationInsights.Extensibility.EventCounterCollector;
+using Microsoft.ApplicationInsights.Extensibility.PerfCounterCollector;
+using System.Security.Claims;
+
 namespace AppInsightsForWebApi;
 
-public sealed class Program
+public static class Program
 {
+    public const string ClientName = "jsonplaceholder";
+
     public static void Main(string[] args)
     {
-        CreateHostBuilder(args).Build().Run();
+        WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+
+        var services = builder.Services;
+
+        bool isDevelopment = builder.Environment.IsDevelopment();
+
+        // Add services to the container
+        {
+            applyApplicationInsights(services, isDevelopment);
+
+            services.AddControllers();
+
+            services.AddSingleton<TestService>();
+            services.AddSingleton<TestRepository>();
+
+            services.AddHttpContextAccessor();
+
+            services.AddHttpClient(ClientName, client => client.BaseAddress = new Uri("http://jsonplaceholder.typicode.com"));
+        }
+
+        WebApplication app = builder.Build();
+
+        // Configure the request pipeline
+        {
+            if (isDevelopment)
+            {
+                // var telemetryConfiguration = app.Services.GetRequiredService<IOptions<TelemetryConfiguration>>().Value;
+                // telemetryConfiguration.DisableTelemetry = true;
+
+                app.UseDeveloperExceptionPage();
+            }
+
+            app.Use(injectFakeUser);
+
+            app.UseAuthorization();
+
+            app.MapVersionEndpoint("/version"); // .RequireAuthorization()
+
+            app.MapControllers();
+
+            app.MapFallback(pageNotFoundHandler);
+        }
+
+        app.Run();
     }
 
-    public static IHostBuilder CreateHostBuilder(string[] args)
+    private static void applyApplicationInsights(IServiceCollection services, bool isDevelopment)
     {
-        return Host
-            .CreateDefaultBuilder(args)
-            .ConfigureWebHostDefaults(webBuilder =>
-                webBuilder
-                    .ConfigureLogging(configureLogging)
-                    .UseStartup<Startup>());
+        services.AddApplicationInsightsTelemetry(options => options.DeveloperMode = isDevelopment);
+
+        // https://docs.microsoft.com/en-us/azure/azure-monitor/app/asp-net-core#configuring-or-removing-default-telemetrymodules
+        if (isDevelopment)
+        {
+            Type[] moduleTypes = [typeof(PerformanceCollectorModule), typeof(EventCounterCollectionModule)];
+
+            foreach (var module in services.Where(t => moduleTypes.Contains(t.ImplementationType)).ToArray())
+                services.Remove(module);
+        }
+
+        // --> Add: TelemetryInitializers
+        services.AddSingleton<ITelemetryInitializer, SetUserIdTelemetryInitializer>();
+        services.AddSingleton<ITelemetryInitializer, NotFoundTelemetryInitializer>();
+        services.AddSingleton<ITelemetryInitializer, ExceptionTelemetryInitializer>();
     }
 
-    private static void configureLogging(WebHostBuilderContext hostContext, ILoggingBuilder logging)
+    private static async Task pageNotFoundHandler(HttpContext context)
     {
-        if (!hostContext.HostingEnvironment.IsDevelopment())
-            logging.ClearProviders();
+        context.Items.Add(NotFoundTelemetryInitializer.NotFoundKey, true); // Use it in the NotFoundTelemetryInitializer
+        context.Response.StatusCode = 404;
+        await context.Response.WriteAsync("The requested endpoint is not found.");
+    }
 
-        // ApplicationInsightsLoggerProvider
-        //Guid instrumentationKey;
+    // For every request, configure a fake user
+    private static Task injectFakeUser(HttpContext httpContext, Func<Task> next)
+    {
+        int userId = Random.Shared.Next(1, 6);
 
-        //if (!Guid.TryParse(hostContext.Configuration["ApplicationInsights:InstrumentationKey"], out instrumentationKey))
-        //  if (!Guid.TryParse(hostContext.Configuration["APPINSIGHTS_INSTRUMENTATIONKEY"], out instrumentationKey))
-        //    throw new NullReferenceException("ApplicationInsights InstrumentationKey is missing from the Configuration.");
+        Claim[] claims =
+        [
+            new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
+            new Claim(ClaimTypes.Name,           $"User#{userId}")
+        ];
 
-        //logging.AddApplicationInsights(instrumentationKey.ToString());
+        var claimsIdentity = new ClaimsIdentity(claims, "FakeAuthType");
+
+        httpContext.User = new ClaimsPrincipal(claimsIdentity);
+
+        return next.Invoke();
     }
 }

@@ -1,4 +1,4 @@
-﻿using AppInsightsForWebApi.ModelAndRepo;
+﻿using AppInsightsForWebApi.ServiceAndRepo;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AppInsightsForWebApi.Controllers;
@@ -7,12 +7,13 @@ namespace AppInsightsForWebApi.Controllers;
 [Route("[controller]")]
 public sealed class LoggerController : ControllerBase
 {
-    private readonly LoggerModel _loggerModel;
+    private readonly TestService _testService;
+
     private readonly ILogger<LoggerController> _logger;
 
-    public LoggerController(LoggerModel loggerModel, ILogger<LoggerController> logger)
+    public LoggerController(TestService testService, ILogger<LoggerController> logger)
     {
-        _loggerModel = loggerModel;
+        _testService = testService;
         _logger      = logger;
     }
 
@@ -28,9 +29,9 @@ public sealed class LoggerController : ControllerBase
 
         try
         {
-            _loggerModel.CallRepositoryInModel();
+            _testService.CallRepositoryInModel();
         }
-        catch (LoggerModelException ex)
+        catch (TestServiceException ex)
         {
             _logger.LogError(ex, "Failed to do something. {MyParams}", new { Param1 = 1, Param2 = "P2" });
 

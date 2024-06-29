@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "RunMeForWorkerService": {
+    "RunMe-Worker": {
       "commandName": "Project",
       "environmentVariables": {
         "DOTNET_ENVIRONMENT": "Development"

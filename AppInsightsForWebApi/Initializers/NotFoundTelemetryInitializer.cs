@@ -19,8 +19,10 @@ public sealed class NotFoundTelemetryInitializer : ITelemetryInitializer
     {
         if (telemetry is not RequestTelemetry requestTelemetry) return;
 
-        if (_httpContextAccessor.HttpContext.Items.ContainsKey(NotFoundKey))
-            return; // If the NotFoundKey is present do not override the Success field.
+        if (_httpContextAccessor.HttpContext!.Items.ContainsKey(NotFoundKey))
+        {
+            return; // If the NotFoundKey is present do not override the Success field
+        }
 
         if (int.TryParse(requestTelemetry.ResponseCode, out int code) && code  is >= 400 and < 500)
         {
