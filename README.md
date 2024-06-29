@@ -1,9 +1,9 @@
 # Playing with Azure Application Insights
-Setting up Application Insights for a web application through the Azure Portal is just a click away.
+Configuring Application Insights for a web application via the Azure Portal is a straightforward process.
 
-Manually setting it up gives you the chance to take full advantage of the framework, allowing you to choose which collector modules to use, add custom properties that may be useful, and so on.
+By setting it up manually, you gain complete control over the framework, enabling you to select specific collector modules, add custom properties, and more.
 
-In this repository, I have manually set up Application Insights for a `WorkerService` and a `Web API` with several examples and customizations.
+In this repository, I've manually configured Application Insights for a `WorkerService` and a `Web API`, showcasing various examples and customizations.
 
 #### Resources
 
