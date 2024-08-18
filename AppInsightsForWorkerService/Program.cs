@@ -16,6 +16,8 @@ public static class Program
         {
             services.AddHostedService<Worker>();
 
+            // You can set the options.ConnectionString
+            // If not, it reads from the environment variable: APPLICATIONINSIGHTS_CONNECTION_STRING
             services.AddApplicationInsightsTelemetryWorkerService(options => options.DeveloperMode = isDevelopment);
 
             services.AddHttpClient(ClientName, client => client.BaseAddress = new Uri("http://jsonplaceholder.typicode.com"));

@@ -61,6 +61,8 @@ public static class Program
 
     private static void applyApplicationInsights(IServiceCollection services, bool isDevelopment)
     {
+        // You can set the options.ConnectionString
+        // If not, it reads from the environment variable: APPLICATIONINSIGHTS_CONNECTION_STRING
         services.AddApplicationInsightsTelemetry(options => options.DeveloperMode = isDevelopment);
 
         // https://docs.microsoft.com/en-us/azure/azure-monitor/app/asp-net-core#configuring-or-removing-default-telemetrymodules
