@@ -2,7 +2,8 @@
 	"info": {
 		"_postman_id": "49ee9298-bb52-4031-a69f-4f52a7b57fb3",
 		"name": "AzureAppInsights",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "8316451"
 	},
 	"item": [
 		{
@@ -11,12 +12,10 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:5000/WeatherForecast/GimmeMore?randomInt={{$randomInt}}",
-					"protocol": "http",
+					"raw": "{{BaseUrl}}/WeatherForecast/GimmeMore?randomInt={{$randomInt}}",
 					"host": [
-						"localhost"
+						"{{BaseUrl}}"
 					],
-					"port": "5000",
 					"path": [
 						"WeatherForecast",
 						"GimmeMore"
@@ -37,12 +36,10 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:5000/WeatherForecast/GimmeOne?randomInt={{$randomInt}}",
-					"protocol": "http",
+					"raw": "{{BaseUrl}}/WeatherForecast/GimmeOne?randomInt={{$randomInt}}",
 					"host": [
-						"localhost"
+						"{{BaseUrl}}"
 					],
-					"port": "5000",
 					"path": [
 						"WeatherForecast",
 						"GimmeOne"
@@ -63,12 +60,10 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:5000/Logger/DoSomeLog",
-					"protocol": "http",
+					"raw": "{{BaseUrl}}/Logger/DoSomeLog",
 					"host": [
-						"localhost"
+						"{{BaseUrl}}"
 					],
-					"port": "5000",
 					"path": [
 						"Logger",
 						"DoSomeLog"
@@ -83,12 +78,10 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:5000/NotFound/NotFoundResponse",
-					"protocol": "http",
+					"raw": "{{BaseUrl}}/NotFound/NotFoundResponse",
 					"host": [
-						"localhost"
+						"{{BaseUrl}}"
 					],
-					"port": "5000",
 					"path": [
 						"NotFound",
 						"NotFoundResponse"
@@ -103,12 +96,10 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:5000/NotFound/NotExists",
-					"protocol": "http",
+					"raw": "{{BaseUrl}}/NotFound/NotExists",
 					"host": [
-						"localhost"
+						"{{BaseUrl}}"
 					],
-					"port": "5000",
 					"path": [
 						"NotFound",
 						"NotExists"
@@ -123,12 +114,10 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:5000/Dependency/CallJsonPlaceholder",
-					"protocol": "http",
+					"raw": "{{BaseUrl}}/Dependency/CallJsonPlaceholder",
 					"host": [
-						"localhost"
+						"{{BaseUrl}}"
 					],
-					"port": "5000",
 					"path": [
 						"Dependency",
 						"CallJsonPlaceholder"
@@ -143,12 +132,10 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:5000/version",
-					"protocol": "http",
+					"raw": "{{BaseUrl}}/version",
 					"host": [
-						"localhost"
+						"{{BaseUrl}}"
 					],
-					"port": "5000",
 					"path": [
 						"version"
 					]
@@ -157,5 +144,33 @@
 			"response": []
 		}
 	],
-	"protocolProfileBehavior": {}
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "BaseUrl",
+			"value": "http://localhost:5000",
+			"type": "string"
+		}
+	]
 }

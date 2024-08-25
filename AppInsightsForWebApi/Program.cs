@@ -53,6 +53,8 @@ public static class Program
 
             app.MapControllers();
 
+            app.MapGet("/", () => "Hello from AppInsights-Test Web API");
+
             app.MapFallback(pageNotFoundHandler);
         }
 
