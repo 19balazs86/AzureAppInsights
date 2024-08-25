@@ -76,4 +76,17 @@ resource webApp 'Microsoft.Web/sites@2022-09-01' = {
   }
 }
 
+// --> Source control
+// https://learn.microsoft.com/en-us/azure/templates/microsoft.web/sites/sourcecontrols
+
+// resource sourceControl 'Microsoft.Web/sites/sourcecontrols@2022-09-01' = {
+//   parent: webApp
+//   name: 'web-app-source'
+//   properties: {
+//     repoUrl: repoURL
+//     branch: branch
+//     isManualIntegration: true
+//   }
+// }
+
 output url string = webApp.properties.defaultHostName
