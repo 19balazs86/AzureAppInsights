@@ -3,30 +3,13 @@
 var rgLocation = resourceGroup().location
 var webAppName = '${appName}-${uniqueString(resourceGroup().id, 'just-a-name')}'
 
-// --> LogAnalytics workspace
-// https://learn.microsoft.com/en-us/azure/templates/microsoft.operationalinsights/workspaces
+// --> Module: LogAnalytics workspace + Application Insights
+// https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/modules
 
-resource logAnalytics 'Microsoft.OperationalInsights/workspaces@2023-09-01' = {
-  name: webAppName
-  location: rgLocation
-  properties: {
-    retentionInDays: 30
-    sku: {
-      name: 'PerGB2018'
-    }
-  }
-}
-
-// --> Application Insights
-// https://learn.microsoft.com/en-us/azure/templates/microsoft.insights/components
-
-resource applicationInsights 'Microsoft.Insights/components@2020-02-02' = {
-  name: webAppName
-  location: rgLocation
-  kind: 'web'
-  properties: {
-    Application_Type: 'web'
-    WorkspaceResourceId: logAnalytics.id
+module moduleAppInsights 'module-AppInsightsLogAnalytics.bicep' = {
+  name: 'Insights-Deployment'
+  params: {
+    appName: webAppName
   }
 }
 
@@ -63,7 +46,7 @@ resource webApp 'Microsoft.Web/sites@2022-09-01' = {
       appSettings: [
         {
           name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
-          value: applicationInsights.properties.ConnectionString
+          value: moduleAppInsights.outputs.appInsights_ConnectionString
         }
       ]
       metadata: [ // optional

@@ -8,7 +8,7 @@
 
     <!-- dotnet publish -t:PublishContainer -->
 
-    <IsPublishable>true</IsPublishable>
+    <!--<IsPublishable>true</IsPublishable>
     <EnableSdkContainerSupport>true</EnableSdkContainerSupport>
 
     <ContainerRepository>19balazs86/app-insights-web-api</ContainerRepository>
@@ -16,7 +16,7 @@
     <ContainerRuntimeIdentifier>linux-x64</ContainerRuntimeIdentifier>
     <ContainerBaseImage>mcr.microsoft.com/dotnet/aspnet:8.0.8-noble-chiseled</ContainerBaseImage>
 
-    <ContainerRegistry>docker.io</ContainerRegistry>
+    <ContainerRegistry>docker.io</ContainerRegistry>-->
   </PropertyGroup>
 
   <ItemGroup>
