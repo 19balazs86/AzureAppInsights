@@ -4,7 +4,19 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Version>1.3.1</Version>
+    <Version>1.3.5</Version>
+
+    <!-- dotnet publish -t:PublishContainer -->
+
+    <IsPublishable>true</IsPublishable>
+    <EnableSdkContainerSupport>true</EnableSdkContainerSupport>
+
+    <ContainerRepository>19balazs86/app-insights-web-api</ContainerRepository>
+    <ContainerImageTags>1.0;latest</ContainerImageTags>
+    <ContainerRuntimeIdentifier>linux-x64</ContainerRuntimeIdentifier>
+    <ContainerBaseImage>mcr.microsoft.com/dotnet/aspnet:8.0.8-noble-chiseled</ContainerBaseImage>
+
+    <ContainerRegistry>docker.io</ContainerRegistry>
   </PropertyGroup>
 
   <ItemGroup>
