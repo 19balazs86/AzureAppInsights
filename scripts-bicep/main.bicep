@@ -49,12 +49,6 @@ resource webApp 'Microsoft.Web/sites@2022-09-01' = {
           value: moduleAppInsights.outputs.appInsights_ConnectionString
         }
       ]
-      metadata: [ // optional
-        {
-          name: 'CURRENT_STACK'
-          value: 'dotnet'
-        }
-      ]
     }
   }
 }
